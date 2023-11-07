@@ -36,13 +36,19 @@ final class NoteListViewController: UIViewController {
     
     private func setupNavigationBar() {
         self.navigationItem.title = "My Notes"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: (UIImage(systemName: "plus.circle")), style: .plain, target: self, action: #selector(navigateToAddNoteVCPage))
+        navigationController?.navigationBar.tintColor = UIColor(red: 0.47, green: 0.29, blue: 0.21, alpha: 1.00)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: (UIImage(systemName: "square.and.pencil")),
+            style: .plain,
+            target: self,
+            action: #selector(navigateToAddNoteVCPage)
+        )
     }
     
     @objc private func navigateToAddNoteVCPage() {
-        let addNoteVCPage = AddNoteViewController()
-        addNoteVCPage.delegate = self
-        self.navigationController?.pushViewController(addNoteVCPage, animated: true)
+        let addNoteVC = AddNoteViewController()
+        addNoteVC.delegate = self
+        self.navigationController?.pushViewController(addNoteVC, animated: true)
     }
     
     private func setupTableView() {
@@ -58,16 +64,10 @@ final class NoteListViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
-    
 }
-
-// MARK: -  Methods
-//func updateNote(with item: Note) {
-//    notes.title = updatedTitle
-//}
 
 // MARK: - TableVIew DataSource
 extension NoteListViewController: UITableViewDataSource {
@@ -84,8 +84,6 @@ extension NoteListViewController: UITableViewDataSource {
         return UITableViewCell()
     }
     
-    
-    // MARK: - Swipe Actions
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -105,9 +103,11 @@ extension NoteListViewController: UITableViewDataSource {
 extension NoteListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let noteDetailsViewController = NoteDetailsViewController()
-        noteDetailsViewController.note = notes[indexPath.row]
-        navigationController?.pushViewController(noteDetailsViewController, animated: true)
+        let noteDetailsVC = NoteDetailsViewController()
+        noteDetailsVC.configure(with: notes[indexPath.row])
+        noteDetailsVC.note = notes[indexPath.row]
+        noteDetailsVC.delegate = self
+        navigationController?.pushViewController(noteDetailsVC, animated: true)
     }
 }
 
@@ -118,4 +118,15 @@ extension NoteListViewController: AddNewNoteDelegate {
         tableView.reloadData()
     }
 }
+
+// MARK: - UpdateNoteDelegate Methods
+extension NoteListViewController: updateNoteDelegate {
+    func updateNote(_ note: Note, with newTitle: String, newContent: String) {
+        if let index = notes.firstIndex(where: { $0 === note }) {
+            notes[index].updateNote(title: newTitle, content: newContent)
+            tableView.reloadData()
+        }
+    }
+}
+
 

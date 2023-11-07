@@ -9,7 +9,7 @@ import UIKit
 
 // MARK: - protocol
 protocol updateNoteDelegate: AnyObject {
-    func updateNote(with item: Note)
+    func updateNote(_ note: Note, with newTitle: String, newContent: String)
 }
 
 final class NoteDetailsViewController: UIViewController {
@@ -17,25 +17,24 @@ final class NoteDetailsViewController: UIViewController {
     var note: Note?
     
     private lazy var noteDetailsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [noteTileLabel, noteContentTextView, noteDateLabel])
+        let stackView = UIStackView(arrangedSubviews: [noteTileTextField, noteContentTextView, noteDateLabel])
         stackView.axis = .vertical
-        stackView.spacing = 20
+        stackView.spacing = 15
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private let noteTileLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .darkGray
-        label.numberOfLines = 0
-        label.textAlignment = .left
-        return label
+    private let noteTileTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        textField.textColor = .darkGray
+        textField.textAlignment = .left
+        return textField
     }()
     
     private let noteDateLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .light)
         label.textColor = UIColor(red: 0.61, green: 0.40, blue: 0.27, alpha: 1.00)
         label.numberOfLines = 0
         label.textAlignment = .left
@@ -46,19 +45,12 @@ final class NoteDetailsViewController: UIViewController {
         let textView = UITextView()
         textView.isScrollEnabled = true
         textView.backgroundColor = .clear
-        textView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textView.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         textView.textColor = .darkGray
         textView.textAlignment = .left
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
         return textView
-    }()
-    
-    private let saveButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Save Changes", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.layer.cornerRadius = 20
-        return button
     }()
     
     weak var delegate: updateNoteDelegate?
@@ -67,16 +59,15 @@ final class NoteDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViews()
         setupBackground()
+        setupNavigationBar()
         setupSubviews()
         setupConstraints()
     }
     
     // MARK: - Configure
-    func configureViews() {
-        guard let note else { return }
-        noteTileLabel.text = note.title
+    func configure(with note: Note) {
+        noteTileTextField.text = note.title
         noteContentTextView.text = note.content
         noteDateLabel.text = note.date
     }
@@ -86,13 +77,32 @@ final class NoteDetailsViewController: UIViewController {
         view.backgroundColor = UIColor(red: 0.96, green: 0.95, blue: 0.93, alpha: 1.00)
     }
     
+    private func setupNavigationBar() {
+        self.navigationItem.title = "New Note"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: (UIImage(systemName: "checkmark.circle")),
+            style: .plain,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
+    }
+    
+    @objc private func saveButtonTapped() {
+        guard let noteTitle = noteTileTextField.text else { return }
+        guard let noteContent = noteContentTextView.text else { return }
+        
+        if let note = note {
+            delegate?.updateNote(note, with: noteTitle, newContent: noteContent)
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     private func setupSubviews() {
         view.addSubview(noteDetailsStackView)
         
-        noteDetailsStackView.addArrangedSubview(noteTileLabel)
+        noteDetailsStackView.addArrangedSubview(noteTileTextField)
         noteDetailsStackView.addArrangedSubview(noteDateLabel)
         noteDetailsStackView.addArrangedSubview(noteContentTextView)
-        noteDetailsStackView.addArrangedSubview(saveButton)
     }
     
     private func setupConstraints() {
@@ -102,13 +112,19 @@ final class NoteDetailsViewController: UIViewController {
             noteDetailsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             noteDetailsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            noteTileLabel.topAnchor.constraint(equalTo: noteDetailsStackView.topAnchor),
-            noteTileLabel.leadingAnchor.constraint(equalTo: noteDetailsStackView.leadingAnchor),
-            noteTileLabel.trailingAnchor.constraint(equalTo: noteDetailsStackView.trailingAnchor),
+            noteTileTextField.topAnchor.constraint(equalTo: noteDetailsStackView.topAnchor),
+            noteTileTextField.leadingAnchor.constraint(equalTo: noteDetailsStackView.leadingAnchor),
+            noteTileTextField.trailingAnchor.constraint(equalTo: noteDetailsStackView.trailingAnchor),
             
             noteContentTextView.leadingAnchor.constraint(equalTo: noteDetailsStackView.leadingAnchor),
             noteContentTextView.trailingAnchor.constraint(equalTo: noteDetailsStackView.trailingAnchor)
         ])
     }
 }
+
+
+
+
+
+
 

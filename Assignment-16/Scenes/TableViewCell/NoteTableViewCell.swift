@@ -34,7 +34,7 @@ final class NoteTableViewCell: UITableViewCell {
     
     private let noteContentPreviewLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         label.textColor = .darkGray
         return label
     }()
@@ -49,12 +49,11 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
         
+        selectionStyle = .none
         setupBackground()
         setupCellStackView()
         setupCellStackViewConstraints()
-        //        layoutSubviews()
     }
     
     required init?(coder: NSCoder) {

@@ -106,7 +106,6 @@ final class LoginViewController: UIViewController {
         button.setTitle("Log In", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        //        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 20
         button.backgroundColor = UIColor(red: 0.61, green: 0.40, blue: 0.27, alpha: 1.00)
         return button
@@ -165,7 +164,6 @@ final class LoginViewController: UIViewController {
             
             logInButton.leadingAnchor.constraint(equalTo: userInputStackView.leadingAnchor, constant: 60),
             logInButton.trailingAnchor.constraint(equalTo: userInputStackView.trailingAnchor, constant: -60)
-            
         ])
     }
     
@@ -189,6 +187,13 @@ final class LoginViewController: UIViewController {
             UserDefaultsHandler.setLoggedIn(true)
             navigationController?.pushViewController(navigateToNoteListVC, animated: true)
             resetUserInputValidation()
+            
+            let alert = UIAlertController(title: "Alert", message: "Welcome to your noting journey, \(userName)!", preferredStyle: .alert)
+            let dismissButton = UIAlertAction(title: "Dismiss", style: .default)
+            alert.addAction(dismissButton)
+            self.present(alert, animated: true)
+            
+            
         } else {
             if let savedPassword = KeyChainHandler.get(service: "MyNotes", account: userName), savedPassword == password {
                 navigationController?.pushViewController(navigateToNoteListVC, animated: true)

@@ -8,10 +8,10 @@
 import UIKit
 
 
-class Note {
-    let title: String
-    let content: String
-    let date: String
+final class Note {
+    var title: String
+    var content: String
+    var date: String
     
     init(title: String, content: String, date: String) {
         self.title = title
@@ -19,7 +19,12 @@ class Note {
         self.date = date
     }
     
-    static let myNotes = [
+    func updateNote(title: String, content: String) {
+        self.title = title
+        self.content = content
+    }
+    
+    static var myNotes = [
         Note(
             title: "App Idea 💡",
             content: "Came up with a brilliant app idea today! It's time to start planning and sketching the user interface. Exciting times ahead!",

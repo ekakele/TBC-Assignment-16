@@ -8,7 +8,7 @@
 import UIKit
 
 class UserDefaultsHandler {
-    static let loginKey = "com.myNotes.loginKey"
+    static let loginKey = "com.myNotes.loginKey22"
     
     static func isLoggedIn() -> Bool {
         return UserDefaults.standard.bool(forKey: loginKey)
