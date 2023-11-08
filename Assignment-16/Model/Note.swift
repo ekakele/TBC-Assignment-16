@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class Note {
+final class Note: Codable {
     var title: String
     var content: String
     var date: String
@@ -52,3 +52,4 @@ final class Note {
         )
     ]
 }
+

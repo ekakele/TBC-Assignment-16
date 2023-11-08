@@ -17,17 +17,18 @@ final class NoteListViewController: UIViewController {
         return tableView
     }()
     
+    private var notes = Note.myNotes
+    
     // MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupBackground()
         setupNavigationBar()
+        getNotesFromUserDefaults()
         setupTableView()
         setupTableViewConstraints()
     }
-    
-    private var notes = Note.myNotes
     
     // MARK: - Private Methods
     private func setupBackground() {
@@ -51,12 +52,23 @@ final class NoteListViewController: UIViewController {
         self.navigationController?.pushViewController(addNoteVC, animated: true)
     }
     
+    private func saveNotesToUserDefaults() {
+        let notesToSave = try? JSONEncoder().encode(notes)
+        UserDefaultsHandler.saveNotes(noteToSave: notesToSave)
+    }
+    
+    private func getNotesFromUserDefaults() {
+        if let notesData = UserDefaultsHandler.getNotes() {
+            let notesArray = try? JSONDecoder().decode([Note].self, from: notesData)
+            notes = notesArray ?? []
+        }
+    }
+    
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(NoteTableViewCell.self, forCellReuseIdentifier: NoteTableViewCell.identifier)
-        
     }
     
     private func setupTableViewConstraints() {
@@ -95,6 +107,7 @@ extension NoteListViewController: UITableViewDataSource {
                 notes.remove(at: index)
             }
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            saveNotesToUserDefaults()
         }
     }
 }
@@ -115,6 +128,7 @@ extension NoteListViewController: UITableViewDelegate {
 extension NoteListViewController: AddNewNoteDelegate {
     func addNewItem(with item: Note) {
         notes.append(item)
+        saveNotesToUserDefaults()
         tableView.reloadData()
     }
 }
@@ -124,9 +138,8 @@ extension NoteListViewController: updateNoteDelegate {
     func updateNote(_ note: Note, with newTitle: String, newContent: String) {
         if let index = notes.firstIndex(where: { $0 === note }) {
             notes[index].updateNote(title: newTitle, content: newContent)
+            saveNotesToUserDefaults()
             tableView.reloadData()
         }
     }
 }
-
-

@@ -8,13 +8,28 @@
 import UIKit
 
 class UserDefaultsHandler {
-    static let loginKey = "com.myNotes.loginKey22"
     
-    static func isLoggedIn() -> Bool {
-        return UserDefaults.standard.bool(forKey: loginKey)
+    struct Keys {
+        static let loginKey = "com.eka.myNotes.loginKey"
+        static let noteKey = "com.eka.myNotes.noteKey"
+    }
+
+    //    MARK: - User LogIn Save & Get Methods
+    static func setLoggedIn(_ isLoggedIn: Bool) {
+        UserDefaults.standard.set(isLoggedIn, forKey: Keys.loginKey)
     }
     
-    static func setLoggedIn(_ isLoggedIn: Bool) {
-        UserDefaults.standard.set(isLoggedIn, forKey: loginKey)
+    static func isLoggedIn() -> Bool {
+        return UserDefaults.standard.bool(forKey: Keys.loginKey)
+    }
+    
+    //    MARK: - Notes Save Method
+    
+    static func saveNotes(noteToSave: Data?) {
+        UserDefaults.standard.setValue(noteToSave, forKey: Keys.noteKey)
+    }
+    
+    static func getNotes() -> Data? {
+        UserDefaults.standard.data(forKey: Keys.noteKey)
     }
 }

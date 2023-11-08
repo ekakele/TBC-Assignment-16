@@ -188,12 +188,12 @@ final class LoginViewController: UIViewController {
             navigationController?.pushViewController(navigateToNoteListVC, animated: true)
             resetUserInputValidation()
             
+            
+            
             let alert = UIAlertController(title: "Alert", message: "Welcome to your noting journey, \(userName)!", preferredStyle: .alert)
             let dismissButton = UIAlertAction(title: "Dismiss", style: .default)
             alert.addAction(dismissButton)
             self.present(alert, animated: true)
-            
-            
         } else {
             if let savedPassword = KeyChainHandler.get(service: "MyNotes", account: userName), savedPassword == password {
                 navigationController?.pushViewController(navigateToNoteListVC, animated: true)

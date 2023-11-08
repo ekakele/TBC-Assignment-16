@@ -29,7 +29,9 @@ class KeyChainHandler {
             kSecValueData as String: dataFromPasswordString as AnyObject,
         ]
         
-        _ = SecItemAdd(query as CFDictionary, nil)
+        let status  = SecItemAdd(query as CFDictionary, nil)
+        
+        
     }
     
     static func get(
