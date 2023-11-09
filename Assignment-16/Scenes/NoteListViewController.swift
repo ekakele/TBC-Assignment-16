@@ -36,9 +36,9 @@ final class NoteListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.navigationItem.title = "My Notes"
+        navigationItem.title = "My Notes"
         navigationController?.navigationBar.tintColor = UIColor(red: 0.47, green: 0.29, blue: 0.21, alpha: 1.00)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: (UIImage(systemName: "square.and.pencil")),
             style: .plain,
             target: self,
@@ -49,7 +49,7 @@ final class NoteListViewController: UIViewController {
     @objc private func navigateToAddNoteVCPage() {
         let addNoteVC = AddNoteViewController()
         addNoteVC.delegate = self
-        self.navigationController?.pushViewController(addNoteVC, animated: true)
+        navigationController?.pushViewController(addNoteVC, animated: true)
     }
     
     private func saveNotesToUserDefaults() {

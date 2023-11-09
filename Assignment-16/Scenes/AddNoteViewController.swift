@@ -68,8 +68,8 @@ final class AddNoteViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.navigationItem.title = "New Note"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+        navigationItem.title = "New Note"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: (UIImage(systemName: "checkmark.circle")),
             style: .plain,
             target: self,
@@ -84,13 +84,12 @@ final class AddNoteViewController: UIViewController {
         formatter.locale = Locale(identifier: "en_US")
         let currentDateTimeString = formatter.string(from: currentDateTime)
         
-        guard let noteTitle = noteTileTextField.text else { return }
-        guard let noteContent = noteContentTextView.text else { return }
+        guard let noteTitle = noteTileTextField.text, let noteContent = noteContentTextView.text else { return }
         let noteDate = currentDateTimeString
         
         let newNote = Note(title: noteTitle, content: noteContent, date: noteDate)
         delegate?.addNewItem(with: newNote)
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     private func setupSubviews() {
@@ -106,14 +105,7 @@ final class AddNoteViewController: UIViewController {
             noteDetailsStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             noteDetailsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             noteDetailsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            noteDetailsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            noteTileTextField.topAnchor.constraint(equalTo: noteDetailsStackView.topAnchor),
-            noteTileTextField.leadingAnchor.constraint(equalTo: noteDetailsStackView.leadingAnchor),
-            noteTileTextField.trailingAnchor.constraint(equalTo: noteDetailsStackView.trailingAnchor),
-            
-            noteContentTextView.leadingAnchor.constraint(equalTo: noteDetailsStackView.leadingAnchor),
-            noteContentTextView.trailingAnchor.constraint(equalTo: noteDetailsStackView.trailingAnchor)
+            noteDetailsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }

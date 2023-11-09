@@ -7,7 +7,7 @@
 
 import UIKit
 
-class KeyChainHandler {
+final class KeyChainHandler {
     enum KeyChainError: Error {
         case sameItemFound
         case unknown

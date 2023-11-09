@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserDefaultsHandler {
+final class UserDefaultsHandler {
     
     struct Keys {
         static let loginKey = "com.eka.myNotes.loginKey"

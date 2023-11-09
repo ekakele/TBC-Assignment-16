@@ -32,8 +32,6 @@ final class LoginViewController: UIViewController {
         stackView.alignment = .center
         stackView.spacing = 10
         stackView.distribution = .equalSpacing
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
         return stackView
     }()
     
@@ -172,10 +170,12 @@ final class LoginViewController: UIViewController {
     }
     
     private func setupLoginButtonAction() {
-        logInButton.addTarget(self, action: #selector(navigateToNoteListVC), for: .touchUpInside)
+        logInButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.navigateToNoteListVC()
+        }), for: .touchUpInside)
     }
     
-    @objc private func navigateToNoteListVC() {
+    private func navigateToNoteListVC() {
         let userName = loginTextField.text!
         let password = passwordTextField.text!
         let navigateToNoteListVC = NoteListViewController()
@@ -188,12 +188,10 @@ final class LoginViewController: UIViewController {
             navigationController?.pushViewController(navigateToNoteListVC, animated: true)
             resetUserInputValidation()
             
-            
-            
             let alert = UIAlertController(title: "Alert", message: "Welcome to your noting journey, \(userName)!", preferredStyle: .alert)
             let dismissButton = UIAlertAction(title: "Dismiss", style: .default)
             alert.addAction(dismissButton)
-            self.present(alert, animated: true)
+            present(alert, animated: true)
         } else {
             if let savedPassword = KeyChainHandler.get(service: "MyNotes", account: userName), savedPassword == password {
                 navigationController?.pushViewController(navigateToNoteListVC, animated: true)
